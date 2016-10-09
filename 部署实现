@@ -1,7 +1,9 @@
 部署环境：
 虚拟机centos7.2，开启了代理服务，docker镜像也是自己pull下来
-hostname：localhost.localdomain
+master 的 hostname：localhost.localdomain
 docker版本：1.12.1
+minion 的 hostname： master.com （因为测试的原因名字改成这个了）
+
 
 
 本人已把镜像上传到我的docker hub里了，只是方便大家使用
@@ -124,6 +126,22 @@ node "localhost.localdomain" tainted
 加入节点：
 在你要添加的节点上执行：（下面这个命令执行在kubeadm init 结束后会告诉你。这边是我的添加节点的<token> 跟<master-ip>）
 # kubeadm join --token 928bd0.36540ec7cb5c4565 192.168.101.46
+执行情况如下：
+[root@master ~]# kubeadm join --token 928bd0.36540ec7cb5c4565 192.168.101.46
+<util/tokens> validating provided token
+<node/discovery> created cluster info discovery client, requesting info from "http://192.168.101.46:9898/cluster-info/v1/?token-id=928bd0"
+<node/discovery> cluster info object received, verifying signature using given token
+<node/discovery> cluster info signature and contents are valid, will use API endpoints [https://192.168.101.46:443]
+<node/csr> created API client to obtain unique certificate for this node, generating keys and certificate signing request
+<node/csr> received signed certificate from the API server, generating kubelet configuration
+<util/kubeconfig> created "/etc/kubernetes/kubelet.conf"
+
+Node join complete:
+* Certificate signing request sent to master and response
+  received.
+* Kubelet informed of new secure connection details.
+
+Run 'kubectl get nodes' on the master to see this machine join.
 
 安装一个pod网络：（这边选择的是weave网络）
 # kubectl apply -f https://git.io/weave-kube
